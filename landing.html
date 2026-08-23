@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>こえかけ家族 — 家族の声かけで、毎日の準備をやさしく</title>
+<meta name="description" content="毎日の「早くして！」を、家族のやさしい声かけに。朝の準備や夜のルーティンを、4人のキャラクターと一緒に進める、子ども向けの声かけ・タイマーアプリです。">
+<style>
+  :root {
+    --main: #F2803A;
+    --main-dark: #D86A28;
+    --bg: #FFFBF5;
+    --card: #FFF3E6;
+    --complete: #4F9B70;
+    --akari: #E97968;
+    --shin: #536780;
+    --hana: #917FAF;
+    --sou: #68866A;
+    --text: #3A2E24;
+    --text-soft: #6B5D4F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+  header.hero {
+    background: linear-gradient(180deg, #FFF3E6 0%, var(--bg) 100%);
+    padding: 56px 0 40px;
+    text-align: center;
+  }
+  .app-icon {
+    width: 96px; height: 96px; border-radius: 22px;
+    box-shadow: 0 8px 24px rgba(216,106,40,0.25);
+    margin-bottom: 16px;
+  }
+  header.hero h1 { font-size: 1.9rem; margin: 0 0 12px; color: var(--main-dark); }
+  header.hero p.tagline { font-size: 1.15rem; color: var(--text); margin: 0 auto 8px; max-width: 480px; }
+  header.hero p.sub { font-size: 0.95rem; color: var(--text-soft); max-width: 480px; margin: 0 auto 28px; }
+
+  .badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--main); color: #fff; font-weight: bold;
+    padding: 13px 26px; border-radius: 14px; font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .badge.soon { background: #fff; color: var(--main-dark); border: 1.5px solid var(--main); }
+
+  section { padding: 48px 0; }
+  section.alt { background: var(--card); }
+  h2 { font-size: 1.4rem; color: var(--main-dark); text-align: center; margin: 0 0 8px; }
+  p.lead { text-align: center; color: var(--text-soft); max-width: 520px; margin: 0 auto 32px; font-size: 0.95rem; }
+
+  .problem-box {
+    background: #fff; border-radius: 20px; padding: 28px; max-width: 620px; margin: 0 auto;
+    box-shadow: 0 2px 12px rgba(58,46,36,0.06);
+  }
+  .problem-box p { margin: 0 0 12px; }
+  .problem-box p:last-child { margin-bottom: 0; }
+
+  .char-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  @media (max-width: 640px) { .char-grid { grid-template-columns: repeat(2, 1fr); } }
+  .char-card {
+    background: #fff; border-radius: 18px; padding: 18px 12px; text-align: center;
+    box-shadow: 0 2px 10px rgba(58,46,36,0.06);
+  }
+  .char-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; }
+  .char-card h3 { font-size: 1rem; margin: 0 0 4px; }
+  .char-card p { font-size: 0.82rem; color: var(--text-soft); margin: 0; }
+  .char-card.akari h3 { color: var(--akari); }
+  .char-card.shin h3 { color: var(--shin); }
+  .char-card.hana h3 { color: var(--hana); }
+  .char-card.sou h3 { color: var(--sou); }
+
+  .feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 680px; margin: 0 auto; }
+  @media (max-width: 640px) { .feature-list { grid-template-columns: 1fr; } }
+  .feature-item {
+    background: #fff; border-radius: 16px; padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(58,46,36,0.06);
+    font-size: 0.92rem;
+  }
+  .feature-item strong { display: block; color: var(--main-dark); margin-bottom: 4px; font-size: 0.98rem; }
+
+  .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 780px; margin: 0 auto; }
+  @media (max-width: 640px) { .step-grid { grid-template-columns: 1fr; } }
+  .step-card { background: #fff; border-radius: 18px; padding: 22px 16px; text-align: center; box-shadow: 0 2px 10px rgba(58,46,36,0.06); position: relative; }
+  .step-num {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--main); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem;
+    margin: 0 auto 12px;
+  }
+  .step-card h3 { font-size: 0.95rem; margin: 0 0 6px; color: var(--main-dark); }
+  .step-card p { font-size: 0.82rem; color: var(--text-soft); margin: 0; }
+
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 680px; margin: 0 auto; }
+  @media (max-width: 640px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+  .photo-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(58,46,36,0.08); }
+  .photo-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+  .photo-card span { display: block; text-align: center; padding: 10px 6px; font-size: 0.82rem; font-weight: 600; color: var(--main-dark); }
+
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 620px; margin: 0 auto; }
+  @media (max-width: 640px) { .plan-grid { grid-template-columns: 1fr; } }
+  .plan-card { background: #fff; border-radius: 20px; padding: 26px 22px; box-shadow: 0 2px 12px rgba(58,46,36,0.06); }
+  .plan-card.plus { border: 2px solid var(--main); position: relative; }
+  .plan-card h3 { margin: 0 0 6px; font-size: 1.1rem; color: var(--main-dark); }
+  .plan-card ul { margin: 12px 0 0; padding-left: 20px; font-size: 0.88rem; color: var(--text-soft); }
+  .plan-card li { margin-bottom: 6px; }
+
+  footer { padding: 40px 0 56px; text-align: center; font-size: 0.85rem; color: var(--text-soft); }
+  footer a { color: var(--main-dark); }
+  footer nav { margin-bottom: 16px; }
+  footer nav a { margin: 0 10px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <img class="app-icon" src="img/app_icon.png" alt="こえかけ家族 アプリアイコン">
+    <h1>こえかけ家族</h1>
+    <p class="tagline">毎日の「早くして！」を、家族のやさしい声かけに。</p>
+    <p class="sub">朝の準備や夜のルーティンを、4人のキャラクターと一緒に進める、子ども向けの声かけ・タイマーアプリです。</p>
+    <div class="badge-row">
+      <a class="badge" href="https://apps.apple.com/app/%E3%81%93%E3%81%88%E3%81%8B%E3%81%91%E5%AE%B6%E6%97%8F/id6799344279">App Storeでダウンロード</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>こんなことで悩んでいませんか？</h2>
+    <div class="problem-box">
+      <p>朝、時計とにらめっこしながら「早くして！」を何度も言ってしまう。</p>
+      <p>怒りたくないのに、つい強い言い方になってしまう。</p>
+      <p>こえかけ家族は、キャラクターが子どもに直接声をかけてくれることで、<strong>親が「怒る係」にならなくても</strong>準備が進む仕組みを目指したアプリです。</p>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>4人のキャラクターがサポート</h2>
+    <p class="lead">性格の違う4人が、シーンに合わせて声をかけてくれます。</p>
+    <div class="char-grid">
+      <div class="char-card akari">
+        <img src="img/akari.png" alt="ママ">
+        <h3>ママ</h3>
+        <p>具体的に案内してくれる</p>
+      </div>
+      <div class="char-card shin">
+        <img src="img/shin.png" alt="パパ">
+        <h3>パパ</h3>
+        <p>短く背中を押してくれる</p>
+      </div>
+      <div class="char-card hana">
+        <img src="img/hana.png" alt="ばあば">
+        <h3>ばあば</h3>
+        <p>やさしく褒めてくれる</p>
+      </div>
+      <div class="char-card sou">
+        <img src="img/sou.png" alt="じいじ">
+        <h3>じいじ</h3>
+        <p>落ち着いて再開を支える</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>はじめかたは、たった4ステップ</h2>
+    <p class="lead">むずかしい設定は必要ありません。5分ほどで、今日から使い始められます。</p>
+    <div class="step-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>お子様を登録</h3>
+        <p>呼び名と年齢を入力するだけ。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>場面を選ぶ</h3>
+        <p>朝の準備・帰宅後・寝る前から選択。ステップは後から自由に編集できます。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>声かけ役を選ぶ</h3>
+        <p>4人のキャラクターから、お子様に合う声かけを選びます。</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>開始時刻を設定</h3>
+        <p>これで完了。あとは家族の合言葉で他の端末とも連携できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>できること</h2>
+    <div class="feature-list">
+      <div class="feature-item"><strong>シーン別テンプレート</strong>朝の準備／帰宅後／寝る前の3パターンをすぐに使えます。</div>
+      <div class="feature-item"><strong>行動ごとのタイマー</strong>ステップごとに時間を区切り、キャラクターが声をかけます。</div>
+      <div class="feature-item"><strong>無理のないペース調整</strong>「もう少し」「手伝って」ボタンで、詰まっても進められます。</div>
+      <div class="feature-item"><strong>家族の連携</strong>家族の合言葉・QRコードで、複数端末をかんたんに連携できます。</div>
+      <div class="feature-item"><strong>プッシュ通知</strong>ルーティン開始時刻や、きょうだいの「できた」をお知らせします。</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>実物写真で、行動がひと目でわかる</h2>
+    <p class="lead">歯ブラシ、ランドセル、パジャマ…おうちにある実際の物を撮って登録すれば、文字が読めないお子様でも「次は何をするか」が写真でわかります。</p>
+    <div class="photo-grid">
+      <div class="photo-card"><img src="img/photo_toothbrush.jpg" alt="歯みがき"><span>歯みがき</span></div>
+      <div class="photo-card"><img src="img/photo_backpack.jpg" alt="持ち物を確認する"><span>持ち物の確認</span></div>
+      <div class="photo-card"><img src="img/photo_shoes.jpg" alt="靴を履く"><span>靴を履く</span></div>
+      <div class="photo-card"><img src="img/photo_notebook.jpg" alt="宿題を出す"><span>宿題を出す</span></div>
+      <div class="photo-card"><img src="img/photo_pajama.jpg" alt="パジャマに着替える"><span>パジャマに着替える</span></div>
+      <div class="photo-card"><img src="img/photo_book.jpg" alt="絵本を読む"><span>絵本を読む</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>料金プラン</h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <h3>無料</h3>
+        <ul>
+          <li>お子様1人まで登録</li>
+          <li>声かけ役 ママ・パパ</li>
+          <li>基本のルーティン機能</li>
+        </ul>
+      </div>
+      <div class="plan-card plus">
+        <h3>ファミリーPlus</h3>
+        <ul>
+          <li>お子様5人まで登録</li>
+          <li>全4役（ばあば・じいじを含む）</li>
+          <li>月額・年額プランをご用意</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <nav>
+      <a href="index.html">サポート・よくある質問</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="mailto:hide19775267@gmail.com">お問い合わせ</a>
+    </nav>
+    <p>&copy; 2026 HIDETO NOMURA</p>
+  </div>
+</footer>
+
+</body>
+</html>
